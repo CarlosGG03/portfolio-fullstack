@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: portfolio-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: portfolio
+      POSTGRES_USER: portfolio
+      POSTGRES_PASSWORD: Anacar0312
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
