@@ -11,6 +11,50 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U portfolio -d portfolio"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend-python:
+    build:
+      context: ../../backend-python
+      dockerfile: Dockerfile
+    container_name: portfolio-backend-python
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+psycopg://portfolio:Anacar0312@postgres:5432/portfolio
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  backend-dotnet:
+    build:
+      context: ../../backend-dotnet
+      dockerfile: Dockerfile
+    container_name: portfolio-backend-dotnet
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    ports:
+      - "5000:5000"
+
+  frontend:
+    build:
+      context: ../../frontend
+      dockerfile: Dockerfile
+    container_name: portfolio-frontend
+    restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000/api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend-python
+      - backend-dotnet
 
 volumes:
   postgres_data:
