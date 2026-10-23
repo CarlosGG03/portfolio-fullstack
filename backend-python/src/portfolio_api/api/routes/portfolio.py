@@ -22,6 +22,13 @@ from portfolio_api.domain.schemas import (
     SkillResponse,
 )
 from portfolio_api.infrastructure.database import get_db
+from portfolio_api.infrastructure.models import (
+    ContactMessageModel,
+    EducationModel,
+    ExperienceModel,
+    ProjectModel,
+    SkillModel,
+)
 
 router = APIRouter()
 
@@ -31,12 +38,12 @@ router = APIRouter()
 def get_projects(
     featured_only: bool = Query(False, description="Filter only featured projects"),
     db: Session = Depends(get_db),
-) -> list[ProjectResponse]:
+) -> list[ProjectModel]:
     return ProjectService.get_all(db, featured_only=featured_only)
 
 
 @router.get("/projects/{slug}", response_model=ProjectResponse, tags=["Projects"])
-def get_project_by_slug(slug: str, db: Session = Depends(get_db)) -> ProjectResponse:
+def get_project_by_slug(slug: str, db: Session = Depends(get_db)) -> ProjectModel:
     project = ProjectService.get_by_slug(db, slug)
     if not project:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
@@ -49,7 +56,7 @@ def get_project_by_slug(slug: str, db: Session = Depends(get_db)) -> ProjectResp
     status_code=status.HTTP_201_CREATED,
     tags=["Projects"],
 )
-def create_project(project_in: ProjectCreate, db: Session = Depends(get_db)) -> ProjectResponse:
+def create_project(project_in: ProjectCreate, db: Session = Depends(get_db)) -> ProjectModel:
     existing = ProjectService.get_by_slug(db, project_in.slug)
     if existing:
         raise HTTPException(
@@ -60,7 +67,7 @@ def create_project(project_in: ProjectCreate, db: Session = Depends(get_db)) -> 
 
 
 @router.put("/projects/{project_id}", response_model=ProjectResponse, tags=["Projects"])
-def update_project(project_id: int, project_in: ProjectUpdate, db: Session = Depends(get_db)) -> ProjectResponse:
+def update_project(project_id: int, project_in: ProjectUpdate, db: Session = Depends(get_db)) -> ProjectModel:
     project = ProjectService.update(db, project_id, project_in)
     if not project:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
@@ -76,7 +83,7 @@ def delete_project(project_id: int, db: Session = Depends(get_db)) -> None:
 
 # ==================== SKILLS ====================
 @router.get("/skills", response_model=list[SkillResponse], tags=["Skills"])
-def get_skills(db: Session = Depends(get_db)) -> list[SkillResponse]:
+def get_skills(db: Session = Depends(get_db)) -> list[SkillModel]:
     return SkillService.get_all(db)
 
 
@@ -86,7 +93,7 @@ def get_skills(db: Session = Depends(get_db)) -> list[SkillResponse]:
     status_code=status.HTTP_201_CREATED,
     tags=["Skills"],
 )
-def create_skill(skill_in: SkillCreate, db: Session = Depends(get_db)) -> SkillResponse:
+def create_skill(skill_in: SkillCreate, db: Session = Depends(get_db)) -> SkillModel:
     return SkillService.create(db, skill_in)
 
 
@@ -99,7 +106,7 @@ def delete_skill(skill_id: int, db: Session = Depends(get_db)) -> None:
 
 # ==================== EXPERIENCES ====================
 @router.get("/experiences", response_model=list[ExperienceResponse], tags=["Experiences"])
-def get_experiences(db: Session = Depends(get_db)) -> list[ExperienceResponse]:
+def get_experiences(db: Session = Depends(get_db)) -> list[ExperienceModel]:
     return ExperienceService.get_all(db)
 
 
@@ -109,7 +116,7 @@ def get_experiences(db: Session = Depends(get_db)) -> list[ExperienceResponse]:
     status_code=status.HTTP_201_CREATED,
     tags=["Experiences"],
 )
-def create_experience(exp_in: ExperienceCreate, db: Session = Depends(get_db)) -> ExperienceResponse:
+def create_experience(exp_in: ExperienceCreate, db: Session = Depends(get_db)) -> ExperienceModel:
     return ExperienceService.create(db, exp_in)
 
 
@@ -126,7 +133,7 @@ def delete_experience(exp_id: int, db: Session = Depends(get_db)) -> None:
 
 # ==================== EDUCATION ====================
 @router.get("/education", response_model=list[EducationResponse], tags=["Education"])
-def get_education(db: Session = Depends(get_db)) -> list[EducationResponse]:
+def get_education(db: Session = Depends(get_db)) -> list[EducationModel]:
     return EducationService.get_all(db)
 
 
@@ -136,7 +143,7 @@ def get_education(db: Session = Depends(get_db)) -> list[EducationResponse]:
     status_code=status.HTTP_201_CREATED,
     tags=["Education"],
 )
-def create_education(edu_in: EducationCreate, db: Session = Depends(get_db)) -> EducationResponse:
+def create_education(edu_in: EducationCreate, db: Session = Depends(get_db)) -> EducationModel:
     return EducationService.create(db, edu_in)
 
 
@@ -154,10 +161,10 @@ def delete_education(edu_id: int, db: Session = Depends(get_db)) -> None:
     status_code=status.HTTP_201_CREATED,
     tags=["Contact"],
 )
-def create_contact_message(msg_in: ContactMessageCreate, db: Session = Depends(get_db)) -> ContactMessageResponse:
+def create_contact_message(msg_in: ContactMessageCreate, db: Session = Depends(get_db)) -> ContactMessageModel:
     return ContactService.create(db, msg_in)
 
 
 @router.get("/contact/messages", response_model=list[ContactMessageResponse], tags=["Contact"])
-def get_contact_messages(db: Session = Depends(get_db)) -> list[ContactMessageResponse]:
+def get_contact_messages(db: Session = Depends(get_db)) -> list[ContactMessageModel]:
     return ContactService.get_all(db)

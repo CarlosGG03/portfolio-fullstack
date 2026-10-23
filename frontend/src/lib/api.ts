@@ -61,7 +61,7 @@ export async function fetchSkills(): Promise<Skill[]> {
     });
     if (!res.ok) throw new Error("Failed to fetch skills");
     return await res.json();
-  } catch (error) {
+  } catch {
     return [
       { id: 1, name: "React & Next.js", category: "Frontend", proficiency_level: 95, order: 1 },
       { id: 2, name: "TypeScript", category: "Frontend", proficiency_level: 90, order: 2 },
@@ -81,7 +81,7 @@ export async function fetchExperiences(): Promise<Experience[]> {
     });
     if (!res.ok) throw new Error("Failed to fetch experiences");
     return await res.json();
-  } catch (error) {
+  } catch {
     return [
       {
         id: 1,
@@ -106,7 +106,7 @@ export async function fetchEducation(): Promise<Education[]> {
     });
     if (!res.ok) throw new Error("Failed to fetch education");
     return await res.json();
-  } catch (error) {
+  } catch {
     return [
       {
         id: 1,
@@ -130,7 +130,7 @@ export async function sendContactMessage(message: ContactMessage): Promise<{ suc
     });
     if (!res.ok) throw new Error("Error enviando mensaje");
     return { success: true, message: "Mensaje enviado exitosamente. ¡Gracias por contactarme!" };
-  } catch (error) {
+  } catch {
     return { success: false, message: "Hubo un problema al enviar el mensaje. Intenta de nuevo más tarde." };
   }
 }

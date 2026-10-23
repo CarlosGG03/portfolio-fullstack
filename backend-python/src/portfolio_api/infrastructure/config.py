@@ -10,8 +10,10 @@ _config = dotenv_values(ENV_FILE) if ENV_FILE.exists() else {}
 
 DATABASE_URL: str = os.getenv(
     "DATABASE_URL",
-    _config.get(
-        "DATABASE_URL",
-        "postgresql+psycopg://portfolio:Anacar0312@localhost:5433/portfolio",
+    str(
+        _config.get(
+            "DATABASE_URL",
+            "postgresql+psycopg://portfolio:Anacar0312@localhost:5433/portfolio",
+        )
     ),
 )

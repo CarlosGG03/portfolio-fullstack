@@ -9,10 +9,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Install uv
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-COPY pyproject.toml uv.lock ./
-RUN uv sync --frozen --no-dev
-
 COPY . .
+RUN uv sync --frozen --no-dev
 
 EXPOSE 8000
 
