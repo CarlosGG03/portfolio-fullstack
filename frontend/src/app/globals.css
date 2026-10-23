@@ -1,19 +1,21 @@
 @import "tailwindcss";
-
-:root {
-  --background: #090d16;
-  --foreground: #f1f5f9;
-}
+@import "./tokens.css";
 
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background: #090d16;
-  color: #f1f5f9;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
   overflow-x: hidden;
+  min-height: 100vh;
+  position: relative;
+  background-image:
+    radial-gradient(ellipse 800px 800px at top left, oklch(0.65 0.22 265 / 12%) 0%, transparent 100%),
+    radial-gradient(ellipse 700px 700px at bottom right, oklch(0.68 0.19 310 / 12%) 0%, transparent 100%);
+  background-attachment: fixed;
 }
 
 /* Custom Keyframe Animations */
@@ -32,7 +34,7 @@ body {
     transform: scale(1);
   }
   50% {
-    opacity: 0.65;
+    opacity: 0.7;
     transform: scale(1.08);
   }
 }
@@ -40,7 +42,7 @@ body {
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(14px);
   }
   to {
     opacity: 1;
@@ -70,7 +72,7 @@ body {
 }
 
 .shimmer-text {
-  background: linear-gradient(90deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+  background: linear-gradient(90deg, oklch(0.7 0.22 265) 0%, oklch(0.72 0.22 310) 50%, oklch(0.75 0.18 160) 100%);
   background-size: 200% auto;
   color: transparent;
   -webkit-background-clip: text;
@@ -78,30 +80,65 @@ body {
   animation: shimmer 6s linear infinite;
 }
 
-/* Glassmorphism Classes */
+/* Paneles y tarjetas estilo moderno y pulido */
 .glass-panel {
-  background: rgba(15, 23, 42, 0.65);
+  background: oklch(0.16 0.025 250 / 65%);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-custom);
 }
 
 .glass-panel:hover {
-  border-color: rgba(99, 102, 241, 0.3);
+  border-color: oklch(0.65 0.22 265 / 40%);
 }
 
 .glass-card {
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.7) 100%);
+  background: linear-gradient(135deg, oklch(0.18 0.03 250 / 60%) 0%, oklch(0.14 0.02 250 / 80%) 100%);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--border);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.3);
 }
 
 .glass-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(129, 140, 248, 0.4);
-  box-shadow: 0 12px 30px -10px rgba(99, 102, 241, 0.2);
+  border-color: oklch(0.65 0.22 265 / 50%);
+  box-shadow: var(--shadow-glow-primary);
+}
+
+/* Badges Profesionales */
+.badge-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: oklch(0.2 0.05 160 / 60%);
+  color: oklch(0.85 0.15 160);
+  border: 1px solid oklch(0.4 0.1 160 / 40%);
+}
+
+.badge-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+  border: 1px solid var(--border);
+  transition: all 0.2s ease;
+}
+
+.badge-tag:hover {
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+  background: var(--primary-container);
 }
 
 /* Custom Scrollbar */
@@ -110,14 +147,19 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #090d16;
+  background: var(--background);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: var(--border);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: var(--muted-foreground);
+}
+
+/* Button Reset */
+button {
+  cursor: pointer;
 }

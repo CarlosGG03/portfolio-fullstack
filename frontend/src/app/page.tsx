@@ -1,72 +1,110 @@
-import {Navbar} from "@/components/Navbar";
-import {Hero} from "@/components/Hero";
-import {ProjectsSection} from "@/components/ProjectsSection";
-import {SkillsSection} from "@/components/SkillsSection";
-import {ExperienceSection} from "@/components/ExperienceSection";
-import {ContactSection} from "@/components/ContactSection";
-import {Footer} from "@/components/Footer";
-import {fetchEducation, fetchExperiences, fetchProjects, fetchSkills} from "@/lib/api";
-import {CheckCircle2, User} from "lucide-react";
+import { ContactSection } from "@/components/ContactSection";
+import { ExperienceSection } from "@/components/ExperienceSection";
+import { Footer } from "@/components/Footer";
+import { Hero } from "@/components/Hero";
+import { Navbar } from "@/components/Navbar";
+import { ProjectsSection } from "@/components/ProjectsSection";
+import { SkillsSection } from "@/components/SkillsSection";
+import type { Education, Experience, Project, Skill } from "@/types";
 
-export default async function Home() {
-  const [projects, skills, experiences, education] = await Promise.all([
-    fetchProjects(),
-    fetchSkills(),
-    fetchExperiences(),
-    fetchEducation(),
-  ]);
+const projects: Project[] = [
+  {
+    id: 1,
+    slug: "orion-platform",
+    title: "Orion Platform",
+    summary: "Plataforma modular para gestionar operaciones, métricas y equipos desde un mismo espacio.",
+    description: "Plataforma modular para gestionar operaciones, métricas y equipos desde un mismo espacio.",
+    technologies: "Next.js, FastAPI, PostgreSQL",
+    featured: true,
+    github_url: "https://github.com/CarlosGG03",
+    live_url: "#",
+    order: 1,
+  },
+  {
+    id: 2,
+    slug: "atlas-api",
+    title: "Atlas API",
+    summary: "API orientada a dominios con autenticación, documentación y una arquitectura lista para crecer.",
+    description: "API orientada a dominios con autenticación, documentación y una arquitectura lista para crecer.",
+    technologies: ".NET, Docker, PostgreSQL",
+    featured: false,
+    github_url: "https://github.com/CarlosGG03",
+    order: 2,
+  },
+];
 
+const skills: Skill[] = [
+  { id: 1, name: "React / Next.js", category: "Frontend", proficiency_level: 5, order: 1 },
+  { id: 2, name: "TypeScript", category: "Frontend", proficiency_level: 5, order: 2 },
+  { id: 3, name: "Tailwind CSS", category: "Frontend", proficiency_level: 5, order: 3 },
+  { id: 4, name: "Python / FastAPI", category: "Backend", proficiency_level: 5, order: 4 },
+  { id: 5, name: "C# / .NET", category: "Backend", proficiency_level: 4, order: 5 },
+  { id: 6, name: "REST & OpenAPI", category: "Backend", proficiency_level: 5, order: 6 },
+  { id: 7, name: "PostgreSQL", category: "Datos", proficiency_level: 4, order: 7 },
+  { id: 8, name: "Docker", category: "DevOps", proficiency_level: 4, order: 8 },
+  { id: 9, name: "Clean Architecture", category: "Arquitectura", proficiency_level: 5, order: 9 },
+];
+
+const experiences: Experience[] = [
+  {
+    id: 1,
+    role: "Senior Full Stack Engineer",
+    company: "Desarrollo de productos digitales",
+    location: "Remoto",
+    start_date: "2022",
+    end_date: "",
+    is_current: true,
+    description: "Diseño soluciones escalables, acompaño decisiones técnicas y convierto problemas complejos en experiencias simples.",
+    technologies: "Next.js, FastAPI, .NET, PostgreSQL",
+    order: 1,
+  },
+  {
+    id: 2,
+    role: "Software Developer",
+    company: "Proyectos empresariales",
+    location: "Colombia",
+    start_date: "2020",
+    end_date: "2022",
+    is_current: false,
+    description: "Construcción de APIs, interfaces y automatizaciones con foco en calidad, mantenibilidad y entrega continua.",
+    technologies: "React, Python, Docker",
+    order: 2,
+  },
+];
+
+const education: Education[] = [
+  {
+    id: 1,
+    degree: "Ingeniería de Sistemas",
+    institution: "Formación universitaria",
+    start_year: "2016",
+    end_year: "2021",
+    description: "Bases sólidas en ingeniería de software, arquitectura y resolución de problemas.",
+    order: 1,
+  },
+  {
+    id: 2,
+    degree: "Aprendizaje continuo",
+    institution: "Especialización práctica",
+    start_year: "2021",
+    end_year: "Presente",
+    description: "Profundización constante en sistemas distribuidos, cloud y diseño de producto.",
+    order: 2,
+  },
+];
+
+export default function Page() {
   return (
-    <div className="min-h-screen bg-[#090d16] text-slate-100 flex flex-col font-sans selection:bg-indigo-500/30 selection:text-indigo-200">
+    <div className="min-h-screen overflow-x-hidden bg-[#08090d] text-slate-100">
       <Navbar />
-      <main className="flex-1 space-y-24 md:space-y-32">
+      <main>
         <Hero />
-
-        {/* Section: Sobre mí */}
-        <section id="about" className="px-4 sm:px-6 max-w-6xl mx-auto">
-          <div className="glass-panel rounded-3xl p-8 sm:p-12 relative overflow-hidden border border-slate-800 shadow-2xl">
-            <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-
-            <div className="flex flex-col md:flex-row gap-8 items-start justify-between relative z-10">
-              <div className="flex-1">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-950/80 text-indigo-400 border border-indigo-800/60 mb-4">
-                  <User className="h-3.5 w-3.5" />
-                  Perfil Profesional
-                </div>
-                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-4">
-                  Pasión por el código limpio y la arquitectura escalable
-                </h2>
-                <p className="text-slate-300 leading-relaxed text-base sm:text-lg mb-6">
-                  Soy un desarrollador de software con sólida experiencia en la construcción de sistemas completos, desde interfaces interactivas y accesibles con <strong className="text-indigo-400 font-semibold">Next.js y React</strong>, hasta backends de alto rendimiento y arquitectura limpia con <strong className="text-purple-400 font-semibold">FastAPI (Python) y ASP.NET Core (C#)</strong>. Apasionado por las buenas prácticas, CI/CD automatizado, contenedores Docker y diseño de bases de datos relacionales en PostgreSQL.
-                </p>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-slate-300">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
-                    <span>Enfoque en Clean Code & SOLID</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
-                    <span>APIs RESTful seguras con JWT & OAuth2</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
-                    <span>Contenedores Docker & Docker Compose</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
-                    <span>Pruebas unitarias e integración continua</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <ProjectsSection projects={projects} />
-        <SkillsSection skills={skills} />
-        <ExperienceSection experiences={experiences} education={education} />
-        <ContactSection />
+        <div className="mx-auto flex max-w-6xl flex-col gap-32 px-4 pb-32 sm:px-6">
+          <ProjectsSection projects={projects} />
+          <SkillsSection skills={skills} />
+          <ExperienceSection experiences={experiences} education={education} />
+          <ContactSection />
+        </div>
       </main>
       <Footer />
     </div>

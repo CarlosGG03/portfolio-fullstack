@@ -1,74 +1,122 @@
-import {Skill} from "@/types";
-import {Cloud, Cpu, Database, Layout, Server} from "lucide-react";
+
+import { Skill } from "@/types";
+import {
+  Braces,
+  Cloud,
+  Code2,
+  Database,
+  Layers3,
+  Server,
+  Workflow,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 interface SkillsSectionProps {
   skills: Skill[];
 }
 
-export function SkillsSection({ skills }: SkillsSectionProps) {
-  // Group skills by category
-  const categories = Array.from(new Set(skills.map((s) => s.category)));
+const categoryIcons: { match: string[]; icon: LucideIcon }[] = [
+  { match: ["front", "web", "ui"], icon: Code2 },
+  { match: ["back", "api"], icon: Server },
+  { match: ["data", "sql", "database"], icon: Database },
+  { match: ["cloud", "devops", "docker"], icon: Cloud },
+  { match: ["arch", "design", "workflow"], icon: Workflow },
+];
 
-  const getCategoryIcon = (category: string) => {
-    const cat = category.toLowerCase();
-    if (cat.includes("front") || cat.includes("web") || cat.includes("ui")) return <Layout className="h-5 w-5 text-indigo-400" />;
-    if (cat.includes("back") || cat.includes("api")) return <Server className="h-5 w-5 text-purple-400" />;
-    if (cat.includes("data") || cat.includes("sql")) return <Database className="h-5 w-5 text-emerald-400" />;
-    if (cat.includes("cloud") || cat.includes("devops") || cat.includes("docker")) return <Cloud className="h-5 w-5 text-sky-400" />;
-    return <Cpu className="h-5 w-5 text-pink-400" />;
-  };
+function getCategoryIcon(category: string): LucideIcon {
+  const normalizedCategory = category.toLowerCase();
 
   return (
-    <section id="skills" className="px-4 sm:px-6 max-w-6xl mx-auto">
+    categoryIcons.find(({ match }) =>
+      match.some((keyword) => normalizedCategory.includes(keyword))
+    )?.icon ?? Braces
+  );
+}
+
+export function SkillsSection({ skills }: SkillsSectionProps) {
+  const categories = Array.from(
+    new Set(skills.map((skill) => skill.category))
+  );
+
+  return (
+    <section
+      id="skills"
+      className="mx-auto w-full max-w-6xl scroll-mt-24 px-4 sm:px-6"
+    >
       <div className="mb-12">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-950/80 text-indigo-400 border border-indigo-800/60 mb-3">
-          <Cpu className="h-3.5 w-3.5" />
-          Tecnologías
-        </div>
-        <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-          Habilidades Técnicas
+        <p className="mb-4 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-indigo-300">
+          <Layers3 className="h-4 w-4" />
+          Stack tecnológico
+        </p>
+
+        <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-5xl">
+          Herramientas para
+          <span className="text-slate-500"> construir.</span>
         </h2>
-        <p className="mt-2 text-slate-400 max-w-xl text-base">
-          Herramientas, frameworks y lenguajes con los que desarrollo arquitecturas de punta a punta.
+
+        <p className="mt-4 max-w-xl text-sm leading-7 text-slate-400 sm:text-base">
+          Tecnologías y herramientas que utilizo para desarrollar
+          interfaces, integrar servicios y construir aplicaciones
+          mantenibles.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {categories.map((category) => (
-          <div
-            key={category}
-            className="glass-card rounded-2xl p-6 border border-slate-800/80"
-          >
-            <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800/80">
-              <div className="p-2 rounded-xl bg-slate-800/80 border border-slate-700/60">
-                {getCategoryIcon(category)}
-              </div>
-              <h3 className="text-lg font-bold text-white tracking-tight">
-                {category}
-              </h3>
-            </div>
+      {skills.length === 0 ? (
+        <p className="text-sm text-slate-400">
+          Las habilidades estarán disponibles próximamente.
+        </p>
+      ) : (
+        <div className="divide-y divide-white/[0.08] border-y border-white/[0.08]">
+          {categories.map((category, index) => {
+            const Icon = getCategoryIcon(category);
 
-            <div className="space-y-4">
-              {skills
-                .filter((s) => s.category === category)
-                .map((skill) => (
-                  <div key={skill.id} className="group">
-                    <div className="flex justify-between text-sm font-medium mb-1.5">
-                      <span className="text-slate-300 group-hover:text-white transition-colors">{skill.name}</span>
-                      <span className="text-indigo-400 font-mono text-xs">{skill.proficiency_level}%</span>
-                    </div>
-                    <div className="w-full bg-slate-800/80 rounded-full h-2 overflow-hidden p-0.5 border border-slate-700/50">
-                      <div
-                        className="bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 h-full rounded-full transition-all duration-700 ease-out"
-                        style={{ width: `${skill.proficiency_level}%` }}
-                      ></div>
-                    </div>
+            const categorySkills = skills.filter(
+              (skill) => skill.category === category
+            );
+
+            return (
+              <div
+                key={category}
+                className="grid gap-5 py-7 sm:grid-cols-[200px_1fr] sm:gap-8 sm:py-9"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5 rounded-lg bg-indigo-400/[0.08] p-2.5 text-indigo-300">
+                    <Icon className="h-5 w-5" />
                   </div>
-                ))}
-            </div>
-          </div>
-        ))}
-      </div>
+
+                  <div>
+                    <span className="font-mono text-[10px] text-slate-600">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+
+                    <h3 className="mt-1 text-sm font-semibold text-white">
+                      {category}
+                    </h3>
+
+                    <p className="mt-1 text-xs text-slate-500">
+                      {categorySkills.length}{" "}
+                      {categorySkills.length === 1
+                        ? "tecnología"
+                        : "tecnologías"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap content-start gap-2">
+                  {categorySkills.map((skill) => (
+                    <span
+                      key={skill.id}
+                      className="inline-flex items-center rounded-lg border border-white/[0.08] bg-white/[0.025] px-3.5 py-2.5 text-sm text-slate-300 transition-colors hover:border-indigo-400/30 hover:bg-indigo-400/[0.05] hover:text-white"
+                    >
+                      {skill.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </section>
   );
 }
